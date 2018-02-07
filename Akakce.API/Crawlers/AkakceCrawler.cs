@@ -83,7 +83,9 @@ namespace Akakce.API.Crawlers
                         ProductModel crawledProduct = new ProductModel();
                         var link = product.SelectNodes(".//a")[0];
 
-                        crawledProduct.Name = WebUtility.HtmlDecode(product.SelectSingleNode(".//b[@class='pn_v8']").InnerText);
+                        //crawledProduct.Name = WebUtility.HtmlDecode(product.SelectSingleNode(".//b[@class='pn_v8']").InnerText);
+                        crawledProduct.Name = product.Descendants()
+                            .FirstOrDefault(p => p.GetAttributeValue("class","").Contains("pn_v8"))?.InnerText;
                         crawledProduct.ProductUrl = WebUtility.HtmlDecode("http://www.akakce.com" + link.GetAttributeValue("href", ""));
                         var img = product.SelectNodes(".//img")[0];
                         string imageUrl = img.GetAttributeValue("style", "").Replace("background-image:url(", "").Replace(")", "");
